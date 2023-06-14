@@ -6,6 +6,10 @@
   "author": "Matthew Tso <matthewt@wepay.com>",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "build": "echo \"no build\"",
+    "test": "echo \"no test\""
+  },
   "dependencies": {
     "express": "^4.18.2"
   }
