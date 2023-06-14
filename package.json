@@ -1,0 +1,12 @@
+{
+  "name": "chaseid",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:hackathon2023bttm/chaseid.git",
+  "author": "Matthew Tso <matthewt@wepay.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
