@@ -11,6 +11,9 @@ export async function GET(request: NextRequest, {params}: {params: { verificatio
 
   try {
     const vs = await VerificationSession.findById(params.verification_session_id)
+    if (!vs) {
+      return NextResponse.json({error: 'not_found'}, {status: 404})
+    }
     const verificationSessionUrl = base + '/verify/' + vs._id
 
     const response = Object.assign({}, {

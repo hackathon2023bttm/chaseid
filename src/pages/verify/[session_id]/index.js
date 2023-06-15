@@ -5,6 +5,93 @@ import CreditProfileForm from '../../../components/CreditProfileForm';
 import { redirect } from 'next/navigation'
 import { RedirectType } from 'next/dist/client/components/redirect';
 
+function EmailLogin(props) {
+  const [email, setEmail] = useState('')
+  const [codeSent, setCodeSent] = useState(false);
+  const [user, setUser] = useState(null)
+  const [code, setCode] = useState('');
+  const [codeConfirmed, setCodeConfirmed] = useState(false)
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const resp = await fetch("/api/auth/login/send_code", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+      headers: { 'content-type': 'application/json' }
+    })
+    const user = await resp.json()
+    setUser(user);
+    setCodeSent(true);
+    console.log(user);
+  }
+
+  const onConfirmCode = async (e) => {
+    e.preventDefault()
+    const resp = await fetch("/api/auth/login/confirm_code", {
+      method: "POST",
+      body: JSON.stringify({ user_id: user['_id'], code: code }),
+      headers: { 'content-type': 'application/json' }
+    })
+    if (resp.status <= 300) {
+      setCodeConfirmed(true);
+      props.onConfirmUser && props.onConfirmUser(user);
+    } else {
+      console.log('confirm error', resp.status, resp.body);
+    }
+  }
+
+  const codeForm = () => (
+    <div className="fixed bg-white border p-4 rounded">
+          <div>
+          <label htmlFor="code">Confirm it's you</label>
+          </div>
+
+          <input type="text" 
+          value={code}
+          onChange={e => {
+            const newCode = e.target.value
+            console.log('code changed', newCode)
+            if (newCode.length > 6) {
+              return;
+            }
+
+            setCode(newCode)
+            if (newCode.length === 6) {
+              onConfirmCode(e)
+            }
+          }}
+          name="code"
+          placeholder='000000'
+          className="text-3xl w-36 text-center shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+  )
+
+  return (
+    <>
+      <div className="m-2">
+        { codeSent && !codeConfirmed && codeForm() }
+      <form onSubmit={onSubmit}>
+        <div>
+        <label htmlFor="email">Email</label>
+        </div>
+        <div>
+
+        <input
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+         name="email" type="email" placeholder="Email" 
+          value={email} onChange={(e) => setEmail(e.target.value)}
+        />
+        </div>
+        <div className="mt-2">
+        <input type="submit" disabled={!!codeConfirmed} className={(codeConfirmed ? 'opacity-30 ' : '') + "  bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"} value="Log In with Chase ID" />
+        </div>
+      </form>
+      </div>
+    </>
+  )
+}
+
 export default function Session() {
   const [ loading, setLoading ] = useState(true);
   const [ verificationSession, setVerificationSession ] = useState(null);
@@ -47,6 +134,10 @@ export default function Session() {
     <div>
       <script src="https://cdn.tailwindcss.com"></script>
       <h1>{ router.query.session_id }</h1>
+
+      <EmailLogin onConfirmUser={(user) => {
+        console.log('confirmed user', user)
+      }}/>
       <form>
         <input type="email" placeholder="Email" />
       </form>
