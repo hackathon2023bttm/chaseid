@@ -2,6 +2,8 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import OperationProfileForm from '../../../components/OperationProfileForm';
 import CreditProfileForm from '../../../components/CreditProfileForm';
+import { redirect } from 'next/navigation'
+import { RedirectType } from 'next/dist/client/components/redirect';
 
 export default function Session() {
   const [ loading, setLoading ] = useState(true);
@@ -36,7 +38,9 @@ export default function Session() {
     })
     console.log('verified', await resp.json())
     const redirectUrl = verificationSession.flow_redirect_url + "?verification_session_id=" + verificationSession._id
-    document.location = redirectUrl
+    // redirect(redirectUrl, RedirectType.push)
+    console.log('redirecting', redirectUrl)
+    window.location.href = redirectUrl
   }
 
   return (
