@@ -24,10 +24,19 @@ export default function Session() {
       .catch(console.error)
   }, [router])
 
-  const onClick = (event) => {
+  const onClick = async (event) => {
     event.preventDefault()
     console.log('submitted')
-    document.location = 'https://' + verificationSession.flow_redirect_url + "?verification_session_id=" + verificationSession._id
+    const resp = await fetch("/api/verification_sessions/" + verificationSession._id + "/submit2", {
+      method: "POST",
+      body: JSON.stringify({
+        profiles: ['credit_profile'],
+        credit_profile: { 'employer': 'foobar'}
+      })
+    })
+    console.log('verified', await resp.json())
+    const redirectUrl = verificationSession.flow_redirect_url + "?verification_session_id=" + verificationSession._id
+    document.location = redirectUrl
   }
 
   return (

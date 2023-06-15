@@ -7,6 +7,10 @@ const port = process.env.PORT || 3000
 const base = process.env.NODE_ENV === 'development' ? ('http://localhost:' + port) : 'https://chaseid.fly.dev'
 
 export async function POST(request: NextRequest) {
+  const authHeader = request.headers.get('authorization')
+  // let appId = ""
+  // if (authHeader && authHeader) {
+  // }
 
   await dbConnect()
 

@@ -21,6 +21,13 @@ export async function POST(request: NextRequest, { params }: { params: { verific
       console.log('credit profile', json['credit_profile'])
     }
 
+    verificationSession.profiles.forEach(async (p: any) => {
+      p.status = "complete"
+      await p.save()
+    })
+    await verificationSession.save()
+    console.log('saved', JSON.stringify(verificationSession.toObject()))
+
     return NextResponse.json({ status: 'success' })
   } catch (e) {
     console.error('Failed to create verification session', e);
