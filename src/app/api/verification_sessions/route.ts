@@ -1,6 +1,7 @@
 import dbConnect from '@/app/lib/mongodb'
 import { NextRequest, NextResponse } from 'next/server'
 import VerificationSession from '@/app/lib/models/VerificationSession'
+import OperationProfile from '@/app/lib/models/OperationProfile';
 import { pick } from 'lodash';
 
 const port = process.env.PORT || 3000
@@ -19,6 +20,10 @@ export async function POST(request: NextRequest) {
     const parsed = pick(json, ['custom_data', 'flow_redirect_url', 'profiles'])
     const verifSession = await VerificationSession.create(parsed)
     const verificationSessionUrl = base + '/verify/' + verifSession._id
+
+    const opsProfile = await OperationProfile.create(parsed)
+    const opsProfileUrl = base + '/verification_session/' + verifSession._id + 'submit'
+    
     // const custom_data = json.custom_data
     console.log({ json });
 
