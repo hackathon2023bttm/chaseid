@@ -15,7 +15,14 @@ const UserSchema = new Schema({
   primaryPhoneVerified: {
     type: Boolean,
   },
-})
+  primaryCreditProfile: {
+    type: Schema.Types.ObjectId,
+  },
+  creditProfiles: {
+    type: [Schema.Types.ObjectId],
+    default: [],
+  },
+});
 
 const user = models.user || model('user', UserSchema);
 

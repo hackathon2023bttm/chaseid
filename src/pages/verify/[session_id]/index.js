@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import OperationProfileForm from '../../../components/OperationProfileForm';
+import CreditProfileForm from '../../../components/CreditProfileForm';
 
 export default function Session() {
   const [ loading, setLoading ] = useState(true);
@@ -23,6 +24,12 @@ export default function Session() {
       .catch(console.error)
   }, [router])
 
+  const onClick = (event) => {
+    event.preventDefault()
+    console.log('submitted')
+    document.location = 'https://' + verificationSession.flow_redirect_url + "?verification_session_id=" + verificationSession._id
+  }
+
   return (
     <div>
       <script src="https://cdn.tailwindcss.com"></script>
@@ -36,6 +43,12 @@ export default function Session() {
           <OperationProfileForm />
         )
       }
+      {
+        !loading && verificationSession.profiles && verificationSession.profiles.some(p => p.type === 'credit_profile') && (
+          <CreditProfileForm />
+        )
+      }
+      <button onClick={onClick}>Submit</button>
     </div>
   )
 }
