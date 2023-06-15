@@ -1,7 +1,6 @@
 import dbConnect from '@/app/lib/mongodb'
 import { NextRequest, NextResponse } from 'next/server'
 import VerificationSession from '@/app/lib/models/VerificationSession'
-import { pick } from 'lodash';
 
 const port = process.env.PORT || 3000
 const base = process.env.NODE_ENV === 'development' ? ('http://localhost:' + port) : 'https://chaseid.fly.dev'

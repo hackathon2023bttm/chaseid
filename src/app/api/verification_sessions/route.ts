@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
     const parsed = pick(json, ['custom_data', 'flow_redirect_url', 'profiles'])
     const verifSession = await VerificationSession.create(parsed)
     const verificationSessionUrl = base + '/verify/' + verifSession._id
+
     // const custom_data = json.custom_data
     console.log({ json });
 
