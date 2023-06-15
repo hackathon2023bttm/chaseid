@@ -7,6 +7,10 @@ const ProfileSchema = new Schema({
   type: {
     type: String,
   },
+  status: {
+    type: String,
+    default: 'requested',
+  },
 });
 
 const VerificationSessionSchema = new Schema({
