@@ -129,7 +129,7 @@ export default function Session() {
     console.log('submitted')
     const submitData = {
       user_id: user && user._id,
-      profiles: verificationSession.profiles,
+      profile_types: verificationSession.profiles.map(p => p.type),
     }
     if (verificationSession.profiles.some(p => p.type === 'credit_profile')) {
       submitData['credit_profile'] = creditProfile

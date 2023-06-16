@@ -46,7 +46,7 @@ export async function POST(request: NextRequest, { params }: { params: { verific
     }
 
     // operation profile
-    const profile_type = pick(json, 'profiles')
+    const profile_type = pick(json, 'profile_types')
     const profile_type_array = Object.values(profile_type);
     const profile_exist = profile_type_array.some(arr => arr.includes(OPERATION_PROFILE));
     if (profile_exist){
