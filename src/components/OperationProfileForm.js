@@ -1,3 +1,5 @@
+import TextInput from "./TextInput"
+
 export default function OperationProfileForm(props) {
   const profile = props.profile || {}
   const onChange = props.onChange || (() => {})
@@ -9,25 +11,25 @@ export default function OperationProfileForm(props) {
     onChange(newProfile)
   }
   return (
-    <form>
+    <form className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-2">
       <div>
-      <div>
+      <div className="block text-sm font-medium leading-6 text-gray-900">
       <label htmlFor="dba_name">Doing Business As Name</label>
       </div>
-      <div>
-        <input onChange={createOnChange('dba_name')} value={profile.dba_name} id="dba_name" name="dba_name" type="text" placeholder="Doing Business As Name" />
+      <div >
+        <TextInput onChange={createOnChange('dba_name')} value={profile.dba_name} id="dba_name" name="dba_name" type="text" placeholder="Doing Business As Name" />
       </div>
       </div>
-      <div>
+      <div className="block text-sm font-medium leading-6 text-gray-900">
 
       <label htmlFor="description">Business Description</label>
-      <input onChange={createOnChange('description')} value={profile.description} id="description" name="description" type="text" placeholder="Description" />
+      <TextInput onChange={createOnChange('description')} value={profile.description} id="description" name="description" type="text" placeholder="Description" />
       </div>
 
-      <div>
+      <div className="block text-sm font-medium leading-6 text-gray-900">
 
       <label htmlFor="naics">NAICS Code</label>
-      <input onChange={createOnChange('naics')} value={profile.naics} id="naics" name="naics" type="text" placeholder="111000" />
+      <TextInput onChange={createOnChange('naics')} value={profile.naics} id="naics" name="naics" type="text" placeholder="111000" />
       </div>
     </form>
   )
