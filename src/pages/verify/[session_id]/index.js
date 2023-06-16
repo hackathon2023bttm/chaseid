@@ -131,10 +131,10 @@ export default function Session() {
       user_id: user && user._id,
       profiles: verificationSession.profiles,
     }
-    if (verificationSession.profiles.includes('credit_profile')) {
+    if (verificationSession.profiles.some(p => p.type === 'credit_profile')) {
       submitData['credit_profile'] = creditProfile
     }
-    if (verificationSession.profiles.includes('operation_profile')) {
+    if (verificationSession.profiles.some(p => p.type === 'operation_profile')) {
       submitData['operation_profile'] = operationProfile
     }
     const resp = await fetch("/api/verification_sessions/" + verificationSession._id + "/submit2", {
