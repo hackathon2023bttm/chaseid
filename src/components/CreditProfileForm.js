@@ -10,6 +10,7 @@ export default function CreditProfileForm(props) {
       </div>
       <div>
         <TextInput
+        value={profile.employer || ''}
         onChange={e => {
           const newProfile = Object.assign({}, profile, {
             employer: e.target.value
@@ -23,7 +24,8 @@ export default function CreditProfileForm(props) {
       </div>
       <div>
       <TextInput 
-      onChange={e => {
+        value={profile.annual_income_amount || ''}
+        onChange={e => {
         const newProfile = Object.assign({}, profile, {
           annual_income_amount: e.target.value
         })

@@ -143,6 +143,16 @@ export default function Session() {
       <EmailLogin onConfirmUser={(user) => {
         console.log('confirmed user', user)
         setUser(user);
+
+        if (user.primaryCreditProfile) {
+          fetch("/api/credit_profiles/" + user.primaryCreditProfile)
+          .then(r => r.json())
+          .then(cp => {
+            console.log('got credit profile', cp)
+            setCreditProfile(cp)
+          })
+          .catch(err => console.error(err))
+        }
       }}/>
 
       {
@@ -153,7 +163,10 @@ export default function Session() {
       {
         !loading && verificationSession.profiles && verificationSession.profiles.some(p => p.type === 'credit_profile') && (
           <CreditProfileForm creditProfile={creditProfile}
-          onChange={p => setCreditProfile(p)}
+          onChange={p => {
+            setCreditProfile(p)
+            console.log(p)
+          }}
            />
         )
       }
