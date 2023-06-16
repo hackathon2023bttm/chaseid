@@ -25,8 +25,7 @@ function EmailLogin(props) {
     console.log(user);
   }
 
-  const onConfirmCode = async (e) => {
-    e.preventDefault()
+  const onConfirmCode = async (code) => {
     const resp = await fetch("/api/auth/login/confirm_code", {
       method: "POST",
       body: JSON.stringify({ user_id: user['_id'], code: code }),
@@ -49,6 +48,7 @@ function EmailLogin(props) {
           <input type="text" 
           value={code}
           onChange={e => {
+            e.preventDefault()
             const newCode = e.target.value
             console.log('code changed', newCode)
             if (newCode.length > 6) {
@@ -57,7 +57,7 @@ function EmailLogin(props) {
 
             setCode(newCode)
             if (newCode.length === 6) {
-              onConfirmCode(e)
+              onConfirmCode(newCode)
             }
           }}
           name="code"
@@ -95,6 +95,9 @@ function EmailLogin(props) {
 export default function Session() {
   const [ loading, setLoading ] = useState(true);
   const [ verificationSession, setVerificationSession ] = useState(null);
+  const [creditProfile, setCreditProfile] = useState({
+    annual_income_currency: 'USD',
+  })
 
   const router = useRouter()
 
@@ -119,15 +122,15 @@ export default function Session() {
     const resp = await fetch("/api/verification_sessions/" + verificationSession._id + "/submit2", {
       method: "POST",
       body: JSON.stringify({
-        profiles: ['credit_profile'],
-        credit_profile: { 'employer': 'foobar'}
+        profiles: verificationSession.profiles,
+        credit_profile: creditProfile,
       })
     })
     console.log('verified', await resp.json())
     const redirectUrl = verificationSession.flow_redirect_url + "?verification_session_id=" + verificationSession._id
     // redirect(redirectUrl, RedirectType.push)
     console.log('redirecting', redirectUrl)
-    window.location.href = redirectUrl
+    document.location = redirectUrl
   }
 
   return (
@@ -149,7 +152,9 @@ export default function Session() {
       }
       {
         !loading && verificationSession.profiles && verificationSession.profiles.some(p => p.type === 'credit_profile') && (
-          <CreditProfileForm />
+          <CreditProfileForm creditProfile={creditProfile}
+          onChange={p => setCreditProfile(p)}
+           />
         )
       }
       <button onClick={onClick}>Submit</button>

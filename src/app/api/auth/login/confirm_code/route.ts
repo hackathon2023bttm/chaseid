@@ -17,6 +17,8 @@ export async function POST(request: NextRequest) {
     const code = json.code;
     const userId = json.user_id;
 
+    console.log('confirming', code, userId)
+
     const user = await User.findById(userId)
     if (!user) {
       return NextResponse.json({ error: 'not_found' }, { status: 404})
@@ -39,10 +41,14 @@ export async function POST(request: NextRequest) {
     }
     */
 
-    await client.verify.v2
+    const verification_check = await client.verify.v2
         .services(verifySid)
         .verificationChecks.create({ to: "+" + user.primaryPhone, code: code })
-        .then((verification_check) => console.log(verification_check))
+        // .then((verification_check) => console.log(verification_check))
+    console.log('user', userId, 'verification_check', verification_check)
+    if (!verification_check.valid) {
+      return NextResponse.json({ error: 'failed_verification' }, { status: 400 })
+    }
 
     return NextResponse.json(user)
   } catch (err: any) {
