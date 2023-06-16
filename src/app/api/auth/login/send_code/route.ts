@@ -6,11 +6,11 @@ import twilio from 'twilio'
 const accountSid = "AC7f76f6cad0f0ef0ca56e85b34df34135";
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const verifySid = "VAd576de9b1fc25512bdb0b184b4014557";
-const client = twilio(accountSid, authToken);
 
 // POST /api/auth/login/send_code
 // { "email": <> }
 export async function POST(request: NextRequest) {
+  const client = twilio(accountSid, authToken);
 
   try {
     await dbConnect()
