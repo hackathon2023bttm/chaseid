@@ -95,6 +95,7 @@ function EmailLogin(props) {
 export default function Session() {
   const [ loading, setLoading ] = useState(true);
   const [ verificationSession, setVerificationSession ] = useState(null);
+  const [ user, setUser] = useState(null);
   const [creditProfile, setCreditProfile] = useState({
     annual_income_currency: 'USD',
   })
@@ -116,12 +117,13 @@ export default function Session() {
       .catch(console.error)
   }, [router])
 
-  const onClick = async (event) => {
+  const onSubmitForm = async (event) => {
     event.preventDefault()
     console.log('submitted')
     const resp = await fetch("/api/verification_sessions/" + verificationSession._id + "/submit2", {
       method: "POST",
       body: JSON.stringify({
+        user_id: user._id,
         profiles: verificationSession.profiles,
         credit_profile: creditProfile,
       })
@@ -140,10 +142,8 @@ export default function Session() {
 
       <EmailLogin onConfirmUser={(user) => {
         console.log('confirmed user', user)
+        setUser(user);
       }}/>
-      <form>
-        <input type="email" placeholder="Email" />
-      </form>
 
       {
         !loading && verificationSession.profiles && verificationSession.profiles.some(p => p.type === 'operation_profile') && (
@@ -157,7 +157,7 @@ export default function Session() {
            />
         )
       }
-      <button onClick={onClick}>Submit</button>
+      <button onClick={onSubmitForm}>Submit</button>
     </div>
   )
 }

@@ -1,6 +1,8 @@
 import dbConnect from '@/app/lib/mongodb'
 import { NextRequest, NextResponse } from 'next/server'
 import VerificationSession from '@/app/lib/models/VerificationSession'
+import CreditProfile from '@/app/lib/models/CreditProfile';
+import User from '@/app/lib/models/User';
 // import { pick } from 'lodash';
 
 // const port = process.env.PORT || 3000
@@ -17,8 +19,22 @@ export async function POST(request: NextRequest, { params }: { params: { verific
     }
 
     const json = await request.json();
+    const userId = json['user_id']
+
+    let user = null;
+    if (userId) {
+      user = await User.findById(userId);
+    }
+
     if (json['credit_profile']) {
       console.log('credit profile', json['credit_profile'])
+      const creditProfile = await CreditProfile.create(json['credit_profile'])
+      if (user) {
+        user.primaryCreditProfile = creditProfile._id
+        user.creditProfiles.push(creditProfile._id)
+        await user.save();
+        console.log('saved credit profile', user.primaryEmail, user.toObject(), creditProfile._id)
+      }
     }
 
     verificationSession.profiles.forEach(async (p: any) => {
