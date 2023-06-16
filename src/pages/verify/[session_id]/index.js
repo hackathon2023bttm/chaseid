@@ -69,11 +69,12 @@ function EmailLogin(props) {
 
   return (
     <>
-      <div className="m-2">
+    
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm ">
         { codeSent && !codeConfirmed && codeForm() }
-      <form onSubmit={onSubmit}>
-        <div>
-        <label htmlFor="email">Email</label>
+      <form onSubmit={onSubmit} className ="space-y-2">
+        <div className="block text-sm font-medium leading-6 text-gray-900">
+        <label htmlFor="email">Email address</label>
         </div>
         <div>
 
@@ -84,7 +85,7 @@ function EmailLogin(props) {
         />
         </div>
         <div className="mt-2">
-        <input type="submit" disabled={!!codeConfirmed} className={(codeConfirmed ? 'opacity-30 ' : '') + "  bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"} value="Log In with Chase ID" />
+        <input type="submit" disabled={!!codeConfirmed} className={(codeConfirmed ? 'opacity-30 ' : '') + " flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"} value="Log In with Chase ID" />
         </div>
       </form>
       </div>
@@ -150,53 +151,57 @@ export default function Session() {
 
   return (
     <div>
-      <script src="https://cdn.tailwindcss.com"></script>
-      <h1>{ router.query.session_id }</h1>
+      <header className="flex items-center justify-between p-4 bg-grey text-white">
+        <div className="flex lg:flex-1">
+          <a href="#" className="-m-1.5 p-1.5">
+            <img className="h-8 w-auto" src="https://www.chase.com/etc/designs/chase-ux/css/img/newheaderlogo.svg" alt="" />
+          </a>
+        </div>
+      <nav className="flex space-x-4">
+        <a href="#" className="text-black hover:text-gray-300">LogIn</a>
+        <a href="#" className="text-black hover:text-gray-300">About</a>
+        <a href="#" className="text-black hover:text-gray-300">Customer Service</a>
+      </nav>
+    </header>
+      <div >
+        <script src="https://cdn.tailwindcss.com"></script>
+        {/* <h1>{ router.query.session_id }</h1> */}
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+              Sign in to your ChaseID account
+            </h2>
 
-      <EmailLogin onConfirmUser={(user) => {
-        console.log('confirmed user', user)
-        setUser(user);
+        <EmailLogin onConfirmUser={(user) => {
+          console.log('confirmed user', user)
+          setUser(user);
 
-        if (user.primaryCreditProfile) {
-          fetch("/api/credit_profiles/" + user.primaryCreditProfile)
-          .then(r => r.json())
-          .then(cp => {
-            console.log('got credit profile', cp)
-            setCreditProfile(cp)
-          })
-          .catch(err => console.error(err))
+          if (user.primaryCreditProfile) {
+            fetch("/api/credit_profiles/" + user.primaryCreditProfile)
+            .then(r => r.json())
+            .then(cp => {
+              console.log('got credit profile', cp)
+              setCreditProfile(cp)
+            })
+            .catch(err => console.error(err))
+          }
+        }}/>
+
+        {
+          !loading && verificationSession.profiles && verificationSession.profiles.some(p => p.type === 'operation_profile') && (
+            <OperationProfileForm />
+          )
         }
-
-        if (user.primaryOperationProfile) {
-          fetch("/api/operation_profiles/" + user.primaryOperationProfile)
-          .then(r => r.json())
-          .then(prof => {
-            console.log('got operation profile', prof)
-            setOperationProfile(prof)
-          })
-          .catch(err => console.error(err))
+        {
+          !loading && verificationSession.profiles && verificationSession.profiles.some(p => p.type === 'credit_profile') && (
+            <CreditProfileForm creditProfile={creditProfile}
+            onChange={p => {
+              setCreditProfile(p)
+              console.log(p)
+            }}
+            />
+          )
         }
-      }}/>
-
-      {
-        !loading && verificationSession.profiles && verificationSession.profiles.some(p => p.type === 'operation_profile') && (
-          <OperationProfileForm profile={operationProfile} onChange={(p) => {
-            setOperationProfile(p);
-            console.log('change profile', p)
-          }} />
-        )
-      }
-      {
-        !loading && verificationSession.profiles && verificationSession.profiles.some(p => p.type === 'credit_profile') && (
-          <CreditProfileForm creditProfile={creditProfile}
-          onChange={p => {
-            setCreditProfile(p)
-            console.log(p)
-          }}
-           />
-        )
-      }
-      <button onClick={onSubmitForm}>Submit</button>
+        <button className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={onSubmitForm}>Submit</button>
+      </div>
     </div>
   )
 }

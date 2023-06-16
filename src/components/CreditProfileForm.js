@@ -4,8 +4,8 @@ export default function CreditProfileForm(props) {
   const profile = props.creditProfile || {}
 
   return (
-    <form>
-      <div>
+    <form className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm space-y-2">
+      <div className="block text-sm font-medium leading-6 text-gray-900">
         <label htmlFor="employer">Employer</label>
       </div>
       <div>
@@ -19,7 +19,7 @@ export default function CreditProfileForm(props) {
         }}
          type="text" id="employer" placeholder="Employer" name="employer" />
       </div>
-      <div>
+      <div className="block text-sm font-medium leading-6 text-gray-900">
         <label htmlFor="annual_income_amount">Annual Income</label>
       </div>
       <div>
