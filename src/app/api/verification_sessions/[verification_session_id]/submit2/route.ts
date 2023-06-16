@@ -4,7 +4,7 @@ import VerificationSession from '@/app/lib/models/VerificationSession'
 import CreditProfile from '@/app/lib/models/CreditProfile';
 import OperationProfile from '@/app/lib/models/OperationProfile'
 import User from '@/app/lib/models/User';
-import { pick } from 'lodash';
+import { pick, omit } from 'lodash';
 const OPERATION_PROFILE = 'operation_profile'
 
 // import { pick } from 'lodash';
@@ -36,7 +36,11 @@ export async function POST(request: NextRequest, { params }: { params: { verific
     // credit profile
     if (json['credit_profile']) {
       console.log('credit profile', json['credit_profile'])
-      const creditProfile = await CreditProfile.create(json['credit_profile'])
+      const creditProfile = await CreditProfile.create(pick(json['credit_profile'], [
+        'employer',
+        'annual_income_amount',
+        'annual_income_currency',
+      ]))
       if (user) {
         user.primaryCreditProfile = creditProfile._id
         user.creditProfiles.push(creditProfile._id)
@@ -45,23 +49,40 @@ export async function POST(request: NextRequest, { params }: { params: { verific
       }
     }
 
-    // operation profile
-    const profile_type = pick(json, 'profile_types')
-    const profile_type_array = Object.values(profile_type);
-    const profile_exist = profile_type_array.some(arr => arr.includes(OPERATION_PROFILE));
-    if (profile_exist){
-      const operation_profile = Object.values(pick(json, 'operation_profile'))
+    // // operation profile
+    // const profile_type = pick(json, 'profile_types')
+    // const profile_type_array = Object.values(profile_type);
+    // const profile_exist = profile_type_array.some(arr => arr.includes(OPERATION_PROFILE));
+    // if (profile_exist){
+    //   const operation_profile = Object.values(pick(json, 'operation_profile'))
 
-      // creating the profile in db
-      const opsProfiles = await OperationProfile.create(operation_profile)
-      console.log('created opsProfiles', opsProfiles)
+    //   // creating the profile in db
+    //   const opsProfile = await OperationProfile.create(pick(operation_profile, ['dba_name', 'description', 'naics'])) as any
+    //   console.log('created opsProfile', opsProfile.toObject())
+    //   if (user) {
+    //     // for (let prof of opsProfiles) {
+    //       user.primaryOperationProfile = opsProfile._id
+    //       user.operationProfiles.push(opsProfile._id)
+    //       await user.save();
+    //       console.log('saved operation profile', user.primaryEmail, user.toObject(), opsProfile._id, opsProfile.toObject())
+    //     // }
+    //   }
+    // }
+
+
+
+    if (json['operation_profile']) {
+      console.log('credit operation_profile', json['operation_profile'])
+      const operationProfile = await OperationProfile.create(pick(json['operation_profile'], [
+        'dba_name',
+        'description',
+        'naics',
+      ]))
       if (user) {
-        for (let prof of opsProfiles) {
-          user.primaryOperationProfile = prof._id
-          user.operationProfiles.push(prof._id)
-          await user.save();
-          console.log('saved operation profile', user.primaryEmail, user.toObject(), prof._id, prof.toObject())
-        }
+        user.primaryOperationProfile = operationProfile._id
+        user.operationProfiles.push(operationProfile._id)
+        await user.save();
+        console.log('saved operation profile', user.primaryEmail, user.toObject(), operationProfile._id, operationProfile.toObject())
       }
     }
 
@@ -75,7 +96,7 @@ export async function POST(request: NextRequest, { params }: { params: { verific
 
     return NextResponse.json({ status: 'success' })
   } catch (e) {
-    console.error('Failed to create verification session', e);
+    console.error('Failed to save verification session', e);
     return NextResponse.json({ error: 'internal_error' }, { status: 500 })
   }
 }

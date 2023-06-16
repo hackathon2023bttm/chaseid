@@ -183,11 +183,27 @@ export default function Session() {
             })
             .catch(err => console.error(err))
           }
+
+          if (user.primaryOperationProfile) {
+            fetch("/api/operation_profiles/" + user.primaryOperationProfile)
+            .then(r => r.json())
+            .then(cp => {
+              console.log('got operation profile', cp)
+              setOperationProfile(cp)
+            })
+            .catch(err => console.error(err))
+          }
         }}/>
 
         {
           !loading && verificationSession.profiles && verificationSession.profiles.some(p => p.type === 'operation_profile') && (
-            <OperationProfileForm />
+            <OperationProfileForm
+              profile={operationProfile}
+              onChange={p => {
+                setOperationProfile(p)
+                console.log(p)
+              }}
+            />
           )
         }
         {
@@ -203,22 +219,22 @@ export default function Session() {
         <button className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 bg-[#0b6efd] hover:bg-[#1f304d] text-white font-bold py-2 px-4 rounded" onClick={onSubmitForm}>Submit</button>
       </div>
 
-  <footer class="pt-8 bg-white rounded-lg shadow m-4 bg-[#126bc5]">
-      <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-        <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" class="hover:underline">JPMorgan Chase & Co™</a>. All Rights Reserved.
+  <footer className="pt-8 bg-white rounded-lg shadow m-4 bg-[#126bc5]">
+      <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+        <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" className="hover:underline">JPMorgan Chase & Co™</a>. All Rights Reserved.
       </span>
-      <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+      <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
           <li>
-              <a href="#" class="mr-4 hover:underline md:mr-6 ">About</a>
+              <a href="#" className="mr-4 hover:underline md:mr-6 ">About</a>
           </li>
           <li>
-              <a href="#" class="mr-4 hover:underline md:mr-6">Privacy Policy</a>
+              <a href="#" className="mr-4 hover:underline md:mr-6">Privacy Policy</a>
           </li>
           <li>
-              <a href="#" class="mr-4 hover:underline md:mr-6">Licensing</a>
+              <a href="#" className="mr-4 hover:underline md:mr-6">Licensing</a>
           </li>
           <li>
-              <a href="#" class="hover:underline">Contact</a>
+              <a href="#" className="hover:underline">Contact</a>
           </li>
       </ul>
       </div>

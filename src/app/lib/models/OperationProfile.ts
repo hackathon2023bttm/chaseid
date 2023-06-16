@@ -1,7 +1,7 @@
 import { Schema, model, models } from 'mongoose'
 
 const OperationProfileSchema = new Schema({
-    dba_name: {
+  dba_name: {
     type: String,
   },
   description: {
