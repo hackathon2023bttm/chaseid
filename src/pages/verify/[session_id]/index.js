@@ -98,6 +98,8 @@ export default function Session() {
   const [ user, setUser] = useState(null);
   const [creditProfile, setCreditProfile] = useState({
     annual_income_currency: 'USD',
+    annual_income_amount: null,
+    employer: null,
   })
 
   const router = useRouter()
@@ -123,7 +125,7 @@ export default function Session() {
     const resp = await fetch("/api/verification_sessions/" + verificationSession._id + "/submit2", {
       method: "POST",
       body: JSON.stringify({
-        user_id: user._id,
+        user_id: user && user._id,
         profiles: verificationSession.profiles,
         credit_profile: creditProfile,
       })

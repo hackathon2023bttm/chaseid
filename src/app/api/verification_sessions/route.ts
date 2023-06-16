@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
     const response = Object.assign({}, {
       verification_session_url: verificationSessionUrl,
     }, verifSession.toObject());
+    console.log('created verification session', JSON.stringify(response))
 
     return NextResponse.json(response)
   } catch (e) {
