@@ -23,6 +23,7 @@ export async function POST(request: NextRequest, { params }: { params: { verific
     }
 
     const json = await request.json();
+    console.log('got submit2', JSON.stringify(json))
     const userId = json['user_id']
 
     let user = null;
