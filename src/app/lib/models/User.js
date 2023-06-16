@@ -22,6 +22,13 @@ const UserSchema = new Schema({
     type: [Schema.Types.ObjectId],
     default: [],
   },
+  primaryOperationProfile: {
+    type: Schema.Types.ObjectId,
+  },
+  operationProfiles: {
+    type: [Schema.Types.ObjectId],
+    default: [],
+  },
 });
 
 const user = models.user || model('user', UserSchema);

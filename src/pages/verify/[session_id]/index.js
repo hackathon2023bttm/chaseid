@@ -98,8 +98,13 @@ export default function Session() {
   const [ user, setUser] = useState(null);
   const [creditProfile, setCreditProfile] = useState({
     annual_income_currency: 'USD',
-    annual_income_amount: null,
-    employer: null,
+    annual_income_amount: 0,
+    employer: '',
+  })
+  const [operationProfile, setOperationProfile] = useState({
+    dba_name: '',
+    description: '',
+    naics: '',
   })
 
   const router = useRouter()
@@ -122,13 +127,19 @@ export default function Session() {
   const onSubmitForm = async (event) => {
     event.preventDefault()
     console.log('submitted')
+    const submitData = {
+      user_id: user && user._id,
+      profiles: verificationSession.profiles,
+    }
+    if (verificationSession.profiles.includes('credit_profile')) {
+      submitData['credit_profile'] = creditProfile
+    }
+    if (verificationSession.profiles.includes('operation_profile')) {
+      submitData['operation_profile'] = operationProfile
+    }
     const resp = await fetch("/api/verification_sessions/" + verificationSession._id + "/submit2", {
       method: "POST",
-      body: JSON.stringify({
-        user_id: user && user._id,
-        profiles: verificationSession.profiles,
-        credit_profile: creditProfile,
-      })
+      body: JSON.stringify(submitData),
     })
     console.log('verified', await resp.json())
     const redirectUrl = verificationSession.flow_redirect_url + "?verification_session_id=" + verificationSession._id
@@ -155,11 +166,24 @@ export default function Session() {
           })
           .catch(err => console.error(err))
         }
+
+        if (user.primaryOperationProfile) {
+          fetch("/api/operation_profiles/" + user.primaryOperationProfile)
+          .then(r => r.json())
+          .then(prof => {
+            console.log('got operation profile', prof)
+            setOperationProfile(prof)
+          })
+          .catch(err => console.error(err))
+        }
       }}/>
 
       {
         !loading && verificationSession.profiles && verificationSession.profiles.some(p => p.type === 'operation_profile') && (
-          <OperationProfileForm />
+          <OperationProfileForm profile={operationProfile} onChange={(p) => {
+            setOperationProfile(p);
+            console.log('change profile', p)
+          }} />
         )
       }
       {
